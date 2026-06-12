@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的神奇問卷</title>
+    
+    <style>
+        /* 讓整個畫面置中，並設定柔和的背景色 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* 問卷卡片本體 */
+        .survey-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #333333;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* 輸入框的外殼組合 */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        /* 欄位標題 */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666666;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 輸入框與文字區域的漂亮樣式 */
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-sizing: border-box; /* 確保寬度計算包含內距 */
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        /* 當滑鼠點擊輸入框時的亮邊效果 */
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        /* 送出按鈕樣式 */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* 當滑鼠移到按鈕上時變深色 */
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="survey-container">
+        <h2>神奇問卷調查</h2>
+        
+        <form id="surveyForm">
+            <div class="input-group">
+                <label for="name">姓名</label>
+                <input type="text" id="name" placeholder="請輸入您的姓名" required>
+            </div>
+
+            <div class="input-group">
+                <label for="message">想說的話</label>
+                <textarea id="message" rows="4" placeholder="有什麼想告訴我的嗎？" required></textarea>
+            </div>
+
+            <button type="submit">送出問卷</button>
+        </form>
+    </div>
+
+    <script>
+        // 監聽表單的送出事件
+        document.getElementById('surveyForm').addEventListener('submit', function(event) {
+            // 阻止表單預設的重整網頁行為
+            event.preventDefault();
+
+            // 1. 抓取使用者在輸入框填寫的資料
+            const userName = document.getElementById('name').value;
+            const userMessage = document.getElementById('message').value;
+
+            // 2. 把資料打包成準備要傳送的物件格式
+            const formData = {
+                name: userName,
+                message: userMessage
+            };
+
+            // 你的神奇網址
+            const targetUrl = 'https://script.google.com/macros/s/AKfycby1NxTahLSo3jE1LlvFOYu_gPsOz40Gy15Sjg5VR-T47DMqCJakP_UCEElkYC_Ivu4E/exec';
+
+            // 3. 使用 fetch 語法，以 POST 方式將資料發送出去
+            fetch(targetUrl, {
+                method: 'POST',
+                // 因為要跨網域傳送給 Google Script，加上 text/plain 可以避免觸發一些複雜的跨來源瀏覽器限制
+                headers: {
+                    'Content-Type': 'text/plain' 
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                // 發送成功後，彈出提示視窗
+                alert('送出成功！');
+                
+                // 順便把填寫欄位清空，方便下一次填寫
+                document.getElementById('surveyForm').reset();
+            })
+            .catch(error => {
+                // 如果中間發生任何錯誤，會在這裡跳出通知
+                console.error('發生錯誤:', error);
+                alert('糟糕，送出失敗，請稍後再試！');
+            });
+        });
+    </script>
+
+</body>
+</html>
