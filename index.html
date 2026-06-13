@@ -97,8 +97,8 @@
             </div>
 
             <div class="input-group">
-                <label for="message">想說的話</label>
-                <textarea id="message" rows="4" placeholder="有什麼想告訴我的嗎？" required></textarea>
+                <label for="answer">想說的話</label>
+                <textarea id="answer" rows="4" placeholder="有什麼想告訴我的嗎？" required></textarea>
             </div>
 
             <button type="submit">送出問卷</button>
@@ -113,12 +113,12 @@
 
             // 1. 抓取使用者在輸入框填寫的資料
             const userName = document.getElementById('name').value;
-            const userMessage = document.getElementById('message').value;
+            const useranswer = document.getElementById('answer').value;
 
             // 2. 把資料打包成準備要傳送的物件格式
             const formData = {
                 name: userName,
-                message: userMessage
+                answer: userAnswer
             };
 
             // 你的神奇網址
