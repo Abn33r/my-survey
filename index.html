@@ -105,7 +105,7 @@
         </form>
     </div>
 
-    <script>
+<script>
         // 監聽表單的送出事件
         document.getElementById('surveyForm').addEventListener('submit', function(event) {
             // 阻止表單預設的重整網頁行為
@@ -113,13 +113,12 @@
 
             // 1. 抓取使用者在輸入框填寫的資料
             const userName = document.getElementById('name').value;
-            const useranswer = document.getElementById('answer').value;
+            const userAnswer = document.getElementById('answer').value; // 修正大小寫：改成 userAnswer
 
-            // 2. 把資料打包成準備要傳送的物件格式
-            const formData = {
-                name: userName,
-                answer: userAnswer
-            };
+            // 2. 把資料轉換成 Google 看得懂的傳統表單包裹格式
+            const urlEncoded = new URLSearchParams();
+            urlEncoded.append('name', userName);     // 貼上名為 'name' 的標籤
+            urlEncoded.append('answer', userAnswer); // 貼上名為 'answer' 的標籤
 
             // 你的神奇網址
             const targetUrl = 'https://script.google.com/macros/s/AKfycby1NxTahLSo3jE1LlvFOYu_gPsOz40Gy15Sjg5VR-T47DMqCJakP_UCEElkYC_Ivu4E/exec';
@@ -127,11 +126,10 @@
             // 3. 使用 fetch 語法，以 POST 方式將資料發送出去
             fetch(targetUrl, {
                 method: 'POST',
-                // 因為要跨網域傳送給 Google Script，加上 text/plain 可以避免觸發一些複雜的跨來源瀏覽器限制
                 headers: {
-                    'Content-Type': 'text/plain' 
+                    'Content-Type': 'application/x-www-form-urlencoded' // 改成適合 Google 讀取的格式
                 },
-                body: JSON.stringify(formData)
+                body: urlEncoded // 把包裹放進去
             })
             .then(response => {
                 // 發送成功後，彈出提示視窗
